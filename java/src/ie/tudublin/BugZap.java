@@ -4,34 +4,42 @@ import processing.core.PApplet;
 
 public class BugZap extends PApplet {
 	public void settings() {
+        //setting the size of the canvas
 		size(500, 500);
 	}
 
 	public void setup() {
+        //resetting the board when the game is started
 		reset();
 	}
 
+    //player variables
 	float playerX, playerY;
 	float playerSpeed = 5;
 	float playerWidth = 40;
 	float halfPlayerWidth = playerWidth / 2;
 
+    //bug variables
 	float bugX, bugY, bugWidth = 30;
 	float halfBugWidth = bugWidth / 2;
 
+    //score variable
 	int score = 0;
 
+    //reset function
 	void reset() {
 		resetBug();
 		playerX = width / 2;
 		playerY = height - 50;
 	}
-
+    
+    //reset bug function, called within the reset function
 	void resetBug() {
 		bugX = random(halfBugWidth, width - halfBugWidth);
 		bugY = 50;
 	}
 
+    //Drawing the bug
 	void drawBug(float x, float y) {
 		// Draw the bug
 		stroke(255);
@@ -54,6 +62,7 @@ public class BugZap extends PApplet {
 
 	}
 
+    //drawing the player
 	void drawPlayer(float x, float y, float w) {
 		stroke(255);
 		float playerHeight = w / 2;
@@ -71,6 +80,7 @@ public class BugZap extends PApplet {
 
 	}
 
+    //moving the player
 	public void keyPressed() {
 		if (keyCode == LEFT) {
 			if (playerX > halfPlayerWidth) {
@@ -97,6 +107,7 @@ public class BugZap extends PApplet {
 		}
 	}
 
+    //moving the bug
 	void moveBug() {
 		if ((frameCount % 1) == 0) {
 			bugX += random(-5, 5);
