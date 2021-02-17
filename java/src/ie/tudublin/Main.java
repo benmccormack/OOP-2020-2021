@@ -61,8 +61,7 @@ public class Main
     {
         String[] a = {"MAIN"};
         processing.core.PApplet.runSketch( a, new Arrays());
-    }
-    public static void main(String[] args)
+    }     public static void main(String[] args)
     {
         Main main = new Main();
         main.arrays();
