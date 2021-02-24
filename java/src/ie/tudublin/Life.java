@@ -68,7 +68,7 @@ public class Life extends PApplet {
 
     public void setCell(boolean[][] board, int row, int col, boolean b)
     {
-        if (row >= 0 && row < size -1 && col >= 0 && col < size -1)
+        if (row >= 0 && row < size && col >= 0 && col < size)
         {
             board[row][col] = b;
         }
@@ -156,6 +156,7 @@ public class Life extends PApplet {
         
         if (keyCode == '1')
         {
+            randomize();
         }
         if (keyCode == '2')
         {
@@ -185,7 +186,40 @@ public class Life extends PApplet {
     private void updateBoard()
     {
         // Put code here to apply the rules!!
-
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                getCell(board, row, col);
+                if(getCell(board, row, col))
+                {
+                    if (countNeighbours(row, col) == 2 || countNeighbours(row, col) == 3)
+                    {
+                        setCell(next, row, col, true);
+                        //next[row][col] = true;
+                    }
+                    else
+                    {
+                        setCell(next, row, col, false);
+                        //next[row][col] = false;
+                    }   
+                }
+                else
+                {
+                    if(countNeighbours(row, col) == 3)
+                    {
+                        setCell(next, row, col, true);
+                        //next[row][col] = true;
+                    }
+                    else
+                    {
+                        //setCell(next, row, col, false);
+                        next[row][col] = false;
+                    }
+                }
+                
+            }
+        }
         
         // Swap board and next
         boolean[][] temp = board;
