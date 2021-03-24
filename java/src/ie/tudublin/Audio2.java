@@ -10,15 +10,15 @@ import processing.core.PApplet;
 public class Audio2 extends PApplet {
 
     Minim minim;
-    AudioPlayer ap;
-    AudioBuffer ab;
-    AudioInput ai;
-    FFT fft;
+    AudioPlayer ap; //audioPlayer ap allowa us to use an mp3 file
+    AudioBuffer ab; //audio buffer
+    AudioInput ai; //can use audio input either which is microphone 
+    FFT fft; 
 
     float[] bands;
     float[] smoothedBands;
 
-    void calculateFrequencyBands() {
+    void calculateFrequencyBands() { //divides FFT into another array where things are space logarithmetically rather than linear
         for (int i = 0; i < bands.length; i++) {
           int start = (int) pow(2, i) - 1;
           int w = (int) pow(2, i);
@@ -74,14 +74,14 @@ public class Audio2 extends PApplet {
     public void setup() {         
         colorMode(HSB);
 
-        minim = new Minim(this);
-        ap = minim.loadFile("heroplanet.mp3", width);
-        ai = minim.getLineIn(Minim.MONO, width, 44100, 16); 
-        ab = ap.mix;
+        minim = new Minim(this); //creates a connection to the Minim library
+        ap = minim.loadFile("heroplanet.mp3", width); //providing the mp3 file to be loaded - frame size, the amount of audio we want to process, must always be a power of 2, width = amount of samples per frame
+        ai = minim.getLineIn(Minim.MONO, width, 44100, 16);  //or get microphone audio via line in
+        ab = ap.mix; //connecting the audio player to the audio buffer - gives mix of left and right channel
 
-        fft = new FFT(width, 44100);
+        fft = new FFT(width, 44100); //instantiate FFT object, pass in frame size and the sample rate
 
-        bands = new float[(int) log2(width)];
+        bands = new float[(int) log2(width)]; 
         smoothedBands = new float[bands.length];
 
     }
@@ -90,13 +90,13 @@ public class Audio2 extends PApplet {
         if (keyCode >= '0' && keyCode <= '5') {
             which = keyCode - '0';
         }
-        if (keyCode == ' ')
+        if (keyCode == ' ') //when we press the space key, it will start the audio 
         {
-            if (ap.isPlaying())
+            if (ap.isPlaying()) //if already playing it will pause
             {
                 ap.pause();
             }
-            else
+            else //otherwise it will go back to the start and play
             {
                 ap.rewind();
                 ap.play();
@@ -113,19 +113,19 @@ public class Audio2 extends PApplet {
         float halfHeight = height / 2;
         for(int i = 0 ; i < ab.size() ; i ++)
         {
-            stroke(map(i, 0, ab.size(), 0, 255), 255, 255);
-            //line(i, halfHeight - (ab.get(i) * halfHeight), i, halfHeight + (ab.get(i) * halfHeight));
+            stroke(map(i, 0, ab.size(), 0, 255), 255, 255); //adding colours
+            //line(i, halfHeight - (ab.get(i) * halfHeight), i, halfHeight + (ab.get(i) * halfHeight)); plotting the audio buffer
         }
 
-        fft.window(FFT.HAMMING);
-        fft.forward(ab);
+        fft.window(FFT.HAMMING); //this is always needed
+        fft.forward(ab); //pass in the audio buffer - this is what does the fft algorithm
 
         int highestBand = 0;
-        for(int i = 0 ; i < fft.specSize() ; i ++)
+        for(int i = 0 ; i < fft.specSize() ; i ++) //specSize to get size of FFT array
         {
             stroke(map(i, 0, fft.specSize(), 0, 255), 255, 255);
             line(i, height, i, height - (fft.getBand(i) * halfHeight));
-            if (fft.getBand(i) > fft.getBand(highestBand))
+            if (fft.getBand(i) > fft.getBand(highestBand)) //Finding the highest band, comparing every element with the highest
             {
                 highestBand = i;
             }
@@ -137,7 +137,7 @@ public class Audio2 extends PApplet {
         text("Frequency: " + freq, 10, 50);
         text("Note: " + spell(freq), 10, 100);
 
-        calculateFrequencyBands();
+        calculateFrequencyBands(); //adding extra method
 
         
         float w = width / (float) bands.length;
