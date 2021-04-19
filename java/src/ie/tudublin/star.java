@@ -3,6 +3,8 @@ package ie.tudublin;
 import processing.data.TableRow;
 
 public class star {
+
+    //creating the fields - these are private fields, can only be accessed by methods inside the star class
     private boolean hab;
     private String displayName;
     private float distance;
@@ -44,6 +46,7 @@ public class star {
         this.absMag = absMag;
     }
 
+    //creating accessors for the private fields - public methods to access these privat fieldss
     //toString method is a method that gets called automatically whenever we pass to something that expects a string
     public boolean isHab() {
         return hab;
